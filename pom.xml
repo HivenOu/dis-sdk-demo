@@ -67,11 +67,37 @@
 
     <build>
         <finalName>dis</finalName>
+        <resources>
+            <resource><!--打包XML配置，-->
+                <directory>${project.basedir}/src/main/resources</directory>
+<!--                <filtering>true</filtering>-->
+<!--                <includes>-->
+<!--                    <include>**/mapping/*.xml</include>-->
+<!--                    <include>*.xml</include>-->
+<!--                </includes>-->
+<!--                <excludes>-->
+<!--                    <exclude>**/conf/*.properties</exclude>-->
+<!--                </excludes>-->
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.1</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                    <webResources>
+                        <resource>
+                            <directory>src/main/resource</directory>
+                        </resource>
+                    </webResources>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
