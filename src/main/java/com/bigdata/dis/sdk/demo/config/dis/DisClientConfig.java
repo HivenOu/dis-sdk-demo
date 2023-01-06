@@ -1,4 +1,4 @@
-package com.bigdata.dis.sdk.demo;
+package com.bigdata.dis.sdk.demo.config.dis;
 
 import com.alibaba.fastjson2.JSON;
 import com.bigdata.dis.sdk.demo.domain.msg.ImageMsg;
@@ -11,10 +11,14 @@ import com.huaweicloud.dis.iface.data.response.GetPartitionCursorResult;
 import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
 import com.huaweicloud.dis.iface.data.response.Record;
 import com.huaweicloud.dis.util.PartitionCursorTypeEnum;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import sun.misc.BASE64Decoder;
 
+import javax.annotation.Resource;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,35 +27,36 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class ConsumerDemo
-{
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConsumerDemo.class);
-    
-    public static void main(String args[])
-    {
-        runConsumerDemo();
-    }
-    
-    private static void runConsumerDemo()
-    {
+@Component
+public class DisClientConfig {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DisClientConfig.class);
+    @Resource
+    private DIS dic;
+
+    @Bean
+    public DIS getDic(){
+        LOGGER.info("init dis bean");
         // 创建DIS客户端实例
-        DIS dic = DISClientBuilder.standard()
-            .withEndpoint("https://dis.cn-north-4.myhuaweicloud.com")
-            .withAk("QBGCCVSYQGPPNSLNYAFJ")
-            .withSk("aRoDjSPAwrXExghc3MUeHer3MeMmjF5iFzXy0j9f")
-            .withProjectId("0a6fccc0d800f4632fefc00d3f4e4bfd")
-            .withRegion("cn-north-4")
-            .withDefaultClientCertAuthEnabled(true)
-            .build();
-        
+        return DISClientBuilder.standard()
+                .withEndpoint("https://dis.cn-north-4.myhuaweicloud.com")
+                .withAk("QBGCCVSYQGPPNSLNYAFJ")
+                .withSk("aRoDjSPAwrXExghc3MUeHer3MeMmjF5iFzXy0j9f")
+                .withProjectId("0a6fccc0d800f4632fefc00d3f4e4bfd")
+                .withRegion("cn-north-4")
+                .withDefaultClientCertAuthEnabled(true)
+                .build();
+    }
+
+    public void runConsumerDemo()
+    {
         // 配置流名称
         String streamName = "dis-Huku";
-        
+
         // 配置数据下载分区ID
         String partitionId = "shardId-0000000000";
-        
+
         // 配置下载数据序列号
-        String startingSequenceNumber = "3";
+        String startingSequenceNumber = "0";
         // 配置下载数据方式
         // AT_SEQUENCE_NUMBER: 从指定的sequenceNumber开始获取，需要设置GetPartitionCursorRequest.setStartingSequenceNumber
         // AFTER_SEQUENCE_NUMBER: 从指定的sequenceNumber之后开始获取，需要设置GetPartitionCursorRequest.setStartingSequenceNumber
@@ -59,7 +64,7 @@ public class ConsumerDemo
         // LATEST: 从最新的记录开始获取
         // AT_TIMESTAMP: 从指定的时间戳(13位)开始获取，需要设置GetPartitionCursorRequest.setTimestamp
         String cursorType = PartitionCursorTypeEnum.AT_SEQUENCE_NUMBER.name();
-        
+
         try
         {
             // 获取数据游标
@@ -70,9 +75,9 @@ public class ConsumerDemo
             request.setStartingSequenceNumber(startingSequenceNumber);
             GetPartitionCursorResult response = dic.getPartitionCursor(request);
             String cursor = response.getPartitionCursor();
-            
+
             LOGGER.info("Get stream {}[partitionId={}] cursor success : {}", streamName, partitionId, cursor);
-            
+
             GetRecordsRequest recordsRequest = new GetRecordsRequest();
             GetRecordsResult recordResponse = null;
             while (true)
@@ -81,7 +86,7 @@ public class ConsumerDemo
                 recordResponse = dic.getRecords(recordsRequest);
                 // 下一批数据游标
                 cursor = recordResponse.getNextPartitionCursor();
-                
+
                 for (Record record : recordResponse.getRecords())
                 {
 //                    LOGGER.info("Get Record [{}], partitionKey [{}], sequenceNumber [{}].",
@@ -107,18 +112,21 @@ public class ConsumerDemo
         catch (DISClientException e)
         {
             LOGGER.error("Failed to get a normal response, please check params and retry. Error message [{}]",
-                e.getMessage(),
-                e);
+                    e.getMessage(),
+                    e);
         }
         catch (Exception e)
         {
             LOGGER.error(e.getMessage(), e);
         }
     }
+
     @SuppressWarnings("finally")
     public static boolean GenerateImage(String imgData, String imgFilePath) throws IOException { // 对字节数组字符串进行Base64解码并生成图片
-        if (imgData == null) // 图像数据为空
+        if (Strings.isBlank(imgData)){
+            // 图像数据为空
             return false;
+        }
         BASE64Decoder decoder = new BASE64Decoder();
         OutputStream out = null;
         try {

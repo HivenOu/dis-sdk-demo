@@ -5,10 +5,10 @@
     <groupId>com.bigdata.dis</groupId>
     <artifactId>dis-sdk-demo</artifactId>
     <version>1.3.0</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
-    <name>dis-sdk-demo</name>
-    <url>https://github.com/huaweicloud/huaweicloud-sdk-java-dis</url>
+    <name>dis</name>
+    <url>https://github.com</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -46,10 +46,44 @@
             <artifactId>fastjson2</artifactId>
             <version>2.0.3</version>
         </dependency>
+
+        <!-- springmvc-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>5.2.15.RELEASE</version>
+        </dependency>
+
+        <!--servlet-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
+        <finalName>dis</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+<!--                    <webResources>-->
+<!--                        <resource>-->
+<!--                            <directory>WebContent</directory>-->
+<!--                        </resource>-->
+<!--                    </webResources>-->
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
