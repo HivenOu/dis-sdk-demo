@@ -52,18 +52,28 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: Log in to the github Container registry
-      uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+#    - name: Log in to the github Container registry
+#      uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+#      with:
+#        registry: ${{ env.REGISTRY }}
+#        username: ${{ github.actor }}
+#        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Docker Login Huawei SWR
+      uses: docker/login-action@v2.0.0
       with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
+        # Server address of Docker registry. If not set then will default to Docker Hub
+        registry: ${{ secrets.SWR_URL }}
+        # Username used to log against the Docker registry
+        username: ${{ secrets.SWR_USER }}
+        # Password or personal access token used to log against the Docker registry
+        password: ${{ secrets.SWR_PASSWORD }}
+        # Log out from the Docker registry at the end of a job
+        logout: false
     - name: Extract metadata (tags, labels) for Docker
       id: meta
       uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
       with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        images: ${{ secrets.SWR_URL }}/${{ env.IMAGE_NAME }}
         tags: |
           type=sha,enable=true,priority=100,prefix={{branch}}-,suffix=,format=short
     - name: Build and push Docker image
