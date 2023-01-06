@@ -39,10 +39,10 @@ public class DisClientConfig {
         // 创建DIS客户端实例
         return DISClientBuilder.standard()
                 .withEndpoint("https://dis.cn-north-4.myhuaweicloud.com")
-                .withAk("QBGCCVSYQGPPNSLNYAFJ")
-                .withSk("aRoDjSPAwrXExghc3MUeHer3MeMmjF5iFzXy0j9f")
-                .withProjectId("0a6fccc0d800f4632fefc00d3f4e4bfd")
-                .withRegion("cn-north-4")
+                .withAk("xxxxx")
+                .withSk("xxxxxxxxx")
+                .withProjectId("xxxxxxx")
+                .withRegion("cn-xx-4")
                 .withDefaultClientCertAuthEnabled(true)
                 .build();
     }
