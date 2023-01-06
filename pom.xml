@@ -14,6 +14,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <!--Maven打包web项目报错：webxml attribute is required (or pre-existing WEB-INF/web.xml if executing in update) -->
+        <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
     
     <dependencies>
@@ -71,18 +73,18 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.1</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                        </manifest>
-                    </archive>
+<!--                <configuration>-->
+<!--                    <archive>-->
+<!--                        <manifest>-->
+<!--                            <addClasspath>true</addClasspath>-->
+<!--                        </manifest>-->
+<!--                    </archive>-->
 <!--                    <webResources>-->
 <!--                        <resource>-->
 <!--                            <directory>WebContent</directory>-->
 <!--                        </resource>-->
 <!--                    </webResources>-->
-                </configuration>
+<!--                </configuration>-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import sun.misc.BASE64Decoder;
 
 import javax.annotation.Resource;
 import java.io.FileNotFoundException;
@@ -26,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 
 @Component
 public class DisClientConfig {
@@ -127,12 +127,14 @@ public class DisClientConfig {
             // 图像数据为空
             return false;
         }
-        BASE64Decoder decoder = new BASE64Decoder();
+        Base64.Decoder decoder = Base64.getDecoder();
+        //BASE64Decoder decoder = new BASE64Decoder();
         OutputStream out = null;
         try {
             out = Files.newOutputStream(Paths.get(imgFilePath));
             // Base64解码
-            byte[] b = decoder.decodeBuffer(imgData);
+            byte[] b =decoder.decode(imgData.getBytes());
+            //byte[] b = decoder.decodeBuffer(imgData);
             for (int i = 0; i < b.length; ++i) {
                 if (b[i] < 0) {// 调整异常数据
                     b[i] += 256;

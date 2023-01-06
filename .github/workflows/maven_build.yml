@@ -29,8 +29,11 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-      
-    - name: upload
+
+    - name: docker build
+      run: echo "docker build"
+
+    - name: upload package
       run: echo "upload docker iamge"
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
