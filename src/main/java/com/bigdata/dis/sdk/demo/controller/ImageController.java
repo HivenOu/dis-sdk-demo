@@ -7,11 +7,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -67,6 +66,26 @@ public class ImageController {
         headers.setContentType(MediaType.IMAGE_JPEG);
         HttpStatus statusCode = HttpStatus.OK;
         return new ResponseEntity<>(body, headers, statusCode);
+    }
+
+    @PostMapping
+    public String uploadImage(MultipartFile file){
+         //获取文件名
+        String originalFilename = file.getOriginalFilename();
+        LOGGER.info("get file and name is : {}",originalFilename);
+        String path="D:\\files\\images";
+        File dir = new File(path);
+        if (!dir.exists()){
+            LOGGER.warn("{} dir is not exists,will mkdir",path);
+            dir.mkdir();
+        }
+        File targetFile = new File(path+originalFilename);
+        try {
+            file.transferTo(targetFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "Success";
     }
 
 }
