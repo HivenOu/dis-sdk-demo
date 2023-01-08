@@ -8,21 +8,21 @@ public class IndexController {
 
     @GetMapping
     public String get(){
-        return "Hello world!!";
+        return "[GET] Hello world!!";
     }
 
     @PostMapping
     public String post(){
-        return "Hello world!!";
+        return "[POST] Hello world!!";
     }
 
     @DeleteMapping
     public String delete(){
-        return "Hello world!!";
+        return "[DELETE] Hello world!!";
     }
 
     @PutMapping
     public String put(){
-        return "Hello world!!";
+        return "[PUT] Hello world!!";
     }
 }
