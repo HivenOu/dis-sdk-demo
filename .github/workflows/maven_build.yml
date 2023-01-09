@@ -34,9 +34,10 @@ jobs:
   maven_build:
 
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
+    # 最后一个step（Update dependency graph）的权限不知道是啥，暂时给到全部的权限
+    #permissions:
+     # contents: read
+      #packages: write
 
     steps:
     - name: Checkout repository
