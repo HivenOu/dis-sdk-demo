@@ -84,10 +84,6 @@ public class ConsumerDemo
                 
                 for (Record record : recordResponse.getRecords())
                 {
-//                    LOGGER.info("Get Record [{}], partitionKey [{}], sequenceNumber [{}].",
-//                        new String(record.getData().array()),
-//                        record.getPartitionKey(),
-//                        record.getSequenceNumber());
                     //转换为对象处理
                     if (JSON.isValid(new String(record.getData().array()))){
                         ImageMsg imageMsg = JSON.parseObject(new String(record.getData().array()), ImageMsg.class);
@@ -99,7 +95,6 @@ public class ConsumerDemo
                         String imagePath="/Users/mac/appData/images/"+format+".jpg";
                         GenerateImage(imageMsg.getImageData(),imagePath);
                         LOGGER.info("save image :{} success!",imagePath);
-                        //IOUtils.writeToFile(new String(encode),"/Users/mac/appData/images/image.jpg");
                     }
                 }
             }
